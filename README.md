@@ -1,0 +1,2 @@
+# KXR_ROSE
+GR-ROSEでKXRをコントロール
