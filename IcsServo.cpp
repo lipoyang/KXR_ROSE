@@ -354,7 +354,7 @@ bool IcsServo::writeID(uint8_t id)
     }
     
     // verify response data
-    uint8_t retval;
+    bool retval;
     if(ICS_CMD_CHECK(rx_data, tx_data, 4)) // verify CMD
     {
         retval = true;

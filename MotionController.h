@@ -13,8 +13,20 @@
 // カウンタの数
 #define CNT_NUM 8
 
-// ボタンの数
-#define BUTTON_NUM 16
+// ボタン
+#define BTN_UP		0x0001	// ↑
+#define BTN_DOWN	0x0002	// ↓
+#define BTN_RIGHT	0x0004	// →
+#define BTN_LEFT	0x0008	// ←
+#define BTN_TRNGL	0x0010	// △
+#define BTN_CROSS	0x0020	// ×
+#define BTN_CIRCLE	0x0040	// ○
+#define BTN_SQUARE	0x0080	// □
+#define BTN_R1		0x0100	// R1
+#define BTN_R2		0x0200	// R2
+#define BTN_L1		0x0400	// L1
+#define BTN_L2		0x0800	// L2
+#define BTN_ALL		0xFFFFFFFF
 
 // 1フレームの時間[ms]
 #define FRAME_TIME 15
@@ -36,9 +48,10 @@
 #define SET_SPEED	0x02 // スピード
 
 // 分岐条件
-#define COND_NONE	0x00 // 無条件
-#define COND_LOOP	0x01 // ループ
-#define COND_BTN	0x02 // ボタン
+#define COND_NONE		0x00 // 無条件
+#define COND_LOOP		0x01 // ループ
+#define COND_BTN_ON		0x02 // ボタンON
+#define COND_BTN_OFF	0x03 // ボタンOFF
 
 // ポジション定数
 #define POS_NO_CHANGE	-32768 // ポジション変更なし
@@ -74,17 +87,17 @@ struct CmdCnt
 // ジャンプ命令のパラメータ
 struct CmdJump
 {
-	uint8_t condType;	// 条件種別
-	uint8_t condParam;	// 条件パラメータ 
-	int8_t  dest;		// 行先
+	uint8_t  condType;	// 条件種別
+	uint32_t condParam;	// 条件パラメータ 
+	int8_t   dest;		// 行先
 };
 
 // コール命令のパラメータ
 struct CmdCall
 {
-	uint8_t condType;	// 条件種別
-	uint8_t condParam;	// 条件パラメータ 
-	MotionData* dest;	// 行先
+	uint8_t  condType;	// 条件種別
+	uint32_t condParam;	// 条件パラメータ 
+	const MotionData* dest;	// 行先
 };
 
 // モーションコントローラ
@@ -99,9 +112,9 @@ public:
 	// メインループから呼ぶ
 	void loop();
 	// ボタンフラグをセットする
-	void setButton(unsigned int buttonNo);
+	void setButton(uint32_t buttonBit);
 	// ボタンフラグをクリアする
-	void clrButton(unsigned int buttonNo);
+	void clrButton(uint32_t buttonBit);
 
 private:
 	// 各コマンド処理
@@ -123,7 +136,7 @@ private:
 	int m_pc;					// モーションデータのプログラム・カウンタ
 	bool m_waiting;				// 待ち状態フラグ
 	int m_cnt[CNT_NUM];			// カウンタ
-	bool m_button[BUTTON_NUM];	// ボタンフラグ
+	uint32_t m_button;			// ボタンフラグ
 	
 	IcsServo *m_servos;			// ICSサーボの配列へのポインタ
 	int16_t m_trims[SERVO_NUM];	// ICSサーボのトリム位置の配列

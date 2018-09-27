@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include "ICS.h"
 #include "MotionController.h"
-#include "M000.h"
+#include "Motion.h"
 
 // ICSサーボ
 IcsController ics1(Serial1); // 右半身系統
@@ -40,7 +40,7 @@ void setup()
 	{
 		if(Serial.available() > 0){
 			char c = Serial.read();
-			if(c = 's') break;
+			if(c == 's') break;
 		}
 	}
 }
@@ -56,9 +56,18 @@ void loop()
 	
 	if(Serial.available() > 0){
 		char c = Serial.read();
-		if(c = 'r'){
-			SYSTEM.PRCR.WORD = 0xa502;
-			SYSTEM.SWRR = 0xa501;
-		}
+		if(c == '1') motionCtrl.setButton(BTN_L1);
+		if(c == '2') motionCtrl.setButton(BTN_L2);
+		if(c == '3') motionCtrl.setButton(BTN_R1);
+		if(c == '4') motionCtrl.setButton(BTN_R2);
+		if(c == 'a') motionCtrl.setButton(BTN_LEFT);
+		if(c == 's') motionCtrl.setButton(BTN_DOWN);
+		if(c == 'd') motionCtrl.setButton(BTN_UP);
+		if(c == 'f') motionCtrl.setButton(BTN_RIGHT);
+		if(c == 'h') motionCtrl.setButton(BTN_SQUARE);
+		if(c == 'j') motionCtrl.setButton(BTN_CROSS);
+		if(c == 'k') motionCtrl.setButton(BTN_TRNGL);
+		if(c == 'l') motionCtrl.setButton(BTN_CIRCLE);
+		if(c == ' ') motionCtrl.clrButton(BTN_ALL);
 	}
 }

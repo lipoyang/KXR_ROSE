@@ -77,21 +77,27 @@ void MotionController::loop()
 	{
 		m_pc++;
 		m_waiting = false;
+		//DEBUG_PRINT("PC=");
+		//DEBUG_PRINTLN(m_pc);
 	}
 }
 
 // ボタンフラグをセットする
 // buttonNo: ボタン番号
-void MotionController::setButton(unsigned int buttonNo)
+void MotionController::setButton(uint32_t buttonFlag)
 {
-	if (buttonNo < BUTTON_NUM) m_button[buttonNo] = true;
+	//DEBUG_PRINT("BUTTON ON: ");
+	//DEBUG_PRINTLN(buttonFlag);
+	m_button |= buttonFlag;
 }
 
 // ボタンフラグをクリアする
 // buttonNo: ボタン番号
-void MotionController::clrButton(unsigned int buttonNo)
+void MotionController::clrButton(uint32_t buttonFlag)
 {
-	if (buttonNo < BUTTON_NUM) m_button[buttonNo] = false;
+	//DEBUG_PRINT("BUTTON OFF: ");
+	//DEBUG_PRINTLN(buttonFlag);
+	m_button &= ~buttonFlag;
 }
 
 // ポジション設定命令
@@ -110,8 +116,8 @@ bool MotionController::cmd_pos()
 		for (int i = 0; i < SERVO_NUM; i++){
 			if (pos[i] != POS_NO_CHANGE){
 				m_servos[i].requestPosition(NEUT_POS + m_trims[i] + pos[i]);
-				//DEBUG_PRINT(pos[i]);
-				DEBUG_PRINT(NEUT_POS + m_trims[i] + pos[i]);
+				DEBUG_PRINT(pos[i]);
+				//DEBUG_PRINT(NEUT_POS + m_trims[i] + pos[i]);
 				DEBUG_PRINT(" ");
 			}
 			else{
@@ -211,7 +217,7 @@ bool MotionController::cmd_jump()
 {
 	CmdJump *param = (CmdJump*)m_motion[m_pc].param;
 	uint8_t condType = param->condType;
-	uint8_t condParam = param->condParam;
+	uint32_t condParam = param->condParam;
 	int8_t dest = param->dest;
 	
 	bool flag = false; // ジャンプするか？
@@ -221,6 +227,7 @@ bool MotionController::cmd_jump()
 	{
 		// 無条件
 		case COND_NONE:
+			//DEBUG_PRINT("JUMP ");
 			flag = true;
 			break;
 		// ループ
@@ -228,16 +235,25 @@ bool MotionController::cmd_jump()
 			if (condParam < CNT_NUM){
 				m_cnt[condParam]--;
 				if (m_cnt[condParam] == 0){
+					DEBUG_PRINT("JUMP LOOP ");
+					DEBUG_PRINTLN(m_pc + dest);
 					flag = true;
 				}
 			}
 			break;
-		// ボタン
-		case COND_BTN:
-			if (condParam < BUTTON_NUM){
-				if (m_button[condParam]){
-					flag = true;
-				}
+		// ボタンON
+		case COND_BTN_ON:
+			if ((m_button & condParam) == condParam){
+				DEBUG_PRINT("JUMP BTN_ON ");
+				DEBUG_PRINTLN(m_pc + dest);
+				flag = true;
+			}
+			break;
+		// ボタンOFF
+		case COND_BTN_OFF:
+			if ((m_button & condParam) == 0){
+				//DEBUG_PRINT("JUMP BTN_OFF ");
+				flag = true;
 			}
 			break;
 	}
@@ -257,8 +273,8 @@ bool MotionController::cmd_call()
 {
 	CmdCall *param = (CmdCall*)m_motion[m_pc].param;
 	uint8_t condType = param->condType;
-	uint8_t condParam = param->condParam;
-	MotionData *dest = param->dest;
+	uint32_t condParam = param->condParam;
+	const MotionData *dest = param->dest;
 
 	bool flag = false; // コールするか？
 	
@@ -267,14 +283,21 @@ bool MotionController::cmd_call()
 	{
 		// 無条件
 		case COND_NONE:
+			DEBUG_PRINT("CALL ");
 			flag = true;
 			break;
-		// ボタン
-		case COND_BTN:
-			if (condParam < BUTTON_NUM){
-				if (m_button[condParam]){
-					flag = true;
-				}
+		// ボタンON
+		case COND_BTN_ON:
+			if ((m_button & condParam) != 0){
+				DEBUG_PRINT("CALL BTN_ON ");
+				flag = true;
+			}
+			break;
+		// ボタンOFF
+		case COND_BTN_OFF:
+			if ((m_button & condParam) == 0){
+				DEBUG_PRINT("CALL BTN_OFF ");
+				flag = true;
 			}
 			break;
 	}
@@ -282,6 +305,8 @@ bool MotionController::cmd_call()
 	// コールするか？
 	if (flag){
 		if (m_sp < MOTION_STACK_SIZE){
+			DEBUG_PRINTLN("");
+			m_stack[m_sp] = m_motion;
 			m_sp++;
 			m_motion = param->dest; // 行先のモーションデータ
 			m_pc = 0;
@@ -298,6 +323,7 @@ bool MotionController::cmd_call()
 bool MotionController::cmd_ret()
 {
 	if (m_sp > 0){
+		DEBUG_PRINTLN("RET");
 		m_sp--;
 		m_motion = m_stack[m_sp]; // 戻り先のモーションデータ
 		m_pc = 0;
