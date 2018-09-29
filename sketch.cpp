@@ -15,7 +15,19 @@ MotionController motionCtrl;
 // トリム位置
 const int16_t TRIM_POS[SERVO_NUM]={
 //  肩P(右,左) 肩R         肘          腿R         腿P         膝           足首P       足首R
-    1350,-1350,-2700,-2700,    0,    0,    0,    0, -250, -250,-2000, -2000,  520,  520,    0,    0
+    1350,-1350,-2700,-2700,    0,    0,    0,    0, -250, -250,-2000,-2000,  520,  520,    0,    0
+};
+
+// ホームポジション
+const int16_t HOME_POS[SERVO_NUM]={
+//  肩P(右,左) 肩R         肘          腿R         腿P         膝           足首P       足首R
+     400, -400,    0,    0,-1200,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0
+};
+
+// ホームストレッチ
+const uint8_t HOME_STRETCH[SERVO_NUM]={
+//  肩P(右,左) 肩R         肘          腿R         腿P         膝           足首P       足首R
+      20,   20,   20,   20,   65,   65,   65,   65,   65,   65,   65,   65,   65,   65,   65,   65
 };
 
 // 初期化
@@ -34,6 +46,7 @@ void setup()
 	// モーションコントローラの初期化
 	motionCtrl.setServo(servos);
 	motionCtrl.setTrim(TRIM_POS);
+	motionCtrl.setHome(HOME_POS, HOME_STRETCH);
 	motionCtrl.begin(M000::motion);
 	
 	while(1)
@@ -43,6 +56,8 @@ void setup()
 			if(c == 's') break;
 		}
 	}
+	// ホームポジションに移動
+	motionCtrl.standHome();
 }
 
 // メインループ

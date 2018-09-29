@@ -26,6 +26,15 @@ void MotionController::setTrim(const int16_t *trims)
 	}
 }
 
+// ホーム位置をセットする
+void MotionController::setHome(const int16_t *pos, const uint8_t *stretch)
+{
+	for(int i=0;i<SERVO_NUM;i++){
+		m_homePos[i]     = pos[i];
+		m_homeStretch[i] = stretch[i];
+	}
+}
+
 // 開始する
 // main_motion: メインのモーションデータ
 void MotionController::begin(const MotionData* main_motion)
@@ -35,10 +44,32 @@ void MotionController::begin(const MotionData* main_motion)
 	m_sp = 0;
 	m_pc = 0;
 	m_waiting = false;
-	
-	// トリムポジションに移動
+}
+
+// トリム位置に移動する
+void MotionController::standTrim()
+{
 	for(int i=0;i<SERVO_NUM;i++){
 		m_servos[i].setPosition(NEUT_POS + m_trims[i]);
+	}
+}
+
+// ホーム位置に移動する
+void MotionController::standHome()
+{
+	for(int i=0;i<SERVO_NUM;i++){
+		m_servos[i].setStretch(m_homeStretch[i]);
+	}
+	for(int i=0;i<SERVO_NUM;i++){
+		m_servos[i].setSpeed(32);
+	}
+	for(int i=0;i<SERVO_NUM;i++){
+		m_servos[i].setPosition(NEUT_POS + m_trims[i] + m_homePos[i]);
+	}
+	delay(2000);
+	
+	for(int i=0;i<SERVO_NUM;i++){
+		m_servos[i].setSpeed(127);
 	}
 }
 

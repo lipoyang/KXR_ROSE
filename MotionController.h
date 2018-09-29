@@ -109,8 +109,14 @@ public:
 	void setServo(IcsServo *servos);
 	// トリム位置をセットする
 	void setTrim(const int16_t *trims);
+	// ホーム位置をセットする
+	void setHome(const int16_t *pos, const uint8_t *stretch);
 	// 開始する
 	void begin(const MotionData* main_motion);
+	// トリム位置に移動する
+	void standTrim();
+	// ホーム位置に移動する
+	void standHome();
 	// メインループから呼ぶ
 	void loop();
 	// ボタンフラグをセットする
@@ -140,8 +146,10 @@ private:
 	int m_cnt[CNT_NUM];			// カウンタ
 	uint32_t m_button;			// ボタンフラグ
 	
-	IcsServo *m_servos;			// ICSサーボの配列へのポインタ
-	int16_t m_trims[SERVO_NUM];	// ICSサーボのトリム位置の配列
+	IcsServo *m_servos;					// ICSサーボの配列へのポインタ
+	int16_t m_trims[SERVO_NUM];			// ICSサーボのトリム位置の配列
+	int16_t m_homePos[SERVO_NUM];		// ICSサーボのホーム位置の配列
+	uint8_t m_homeStretch[SERVO_NUM];	// ICSサーボのホームストレッチの配列
 	
 	uint32_t m_time_s;	// タイマ開始時刻
 	uint32_t m_time_e;	// タイマ終了時刻
