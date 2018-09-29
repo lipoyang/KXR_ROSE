@@ -27,6 +27,7 @@
 #define BTN_L1		0x0400	// L1
 #define BTN_L2		0x0800	// L2
 #define BTN_ALL		0xFFFFFFFF
+#define BTN_OFF		0x00000000
 
 // 1フレームの時間[ms]
 #define FRAME_TIME 15
@@ -50,8 +51,9 @@
 // 分岐条件
 #define COND_NONE		0x00 // 無条件
 #define COND_LOOP		0x01 // ループ
-#define COND_BTN_ON		0x02 // ボタンON
-#define COND_BTN_OFF	0x03 // ボタンOFF
+#define COND_BTN		0x02 // ボタン(一致)
+#define COND_BTN_ON		0x03 // ボタンON
+#define COND_BTN_OFF	0x04 // ボタンOFF
 
 // ポジション定数
 #define POS_NO_CHANGE	-32768 // ポジション変更なし

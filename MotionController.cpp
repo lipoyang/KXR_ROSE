@@ -241,6 +241,14 @@ bool MotionController::cmd_jump()
 				}
 			}
 			break;
+		// ボタン(一致)
+		case COND_BTN:
+			if (m_button == condParam){
+				DEBUG_PRINT("JUMP BTN ");
+				DEBUG_PRINTLN(m_pc + dest);
+				flag = true;
+			}
+			break;
 		// ボタンON
 		case COND_BTN_ON:
 			if ((m_button & condParam) == condParam){
@@ -286,9 +294,16 @@ bool MotionController::cmd_call()
 			DEBUG_PRINT("CALL ");
 			flag = true;
 			break;
+		// ボタン(一致)
+		case COND_BTN:
+			if (m_button == condParam){
+				DEBUG_PRINT("CALL BTN ");
+				flag = true;
+			}
+			break;
 		// ボタンON
 		case COND_BTN_ON:
-			if ((m_button & condParam) != 0){
+			if ((m_button & condParam) == condParam){
 				DEBUG_PRINT("CALL BTN_ON ");
 				flag = true;
 			}
