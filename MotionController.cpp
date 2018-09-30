@@ -50,7 +50,9 @@ void MotionController::begin(const MotionData* main_motion)
 void MotionController::standTrim()
 {
 	for(int i=0;i<SERVO_NUM;i++){
-		m_servos[i].setPosition(NEUT_POS + m_trims[i]);
+		uint16_t pos = (uint16_t)(NEUT_POS + m_trims[i]);
+		m_servos[i].setPosition(pos);
+		m_pos1[i] = pos;
 	}
 }
 
@@ -64,7 +66,9 @@ void MotionController::standHome()
 		m_servos[i].setSpeed(32);
 	}
 	for(int i=0;i<SERVO_NUM;i++){
-		m_servos[i].setPosition(NEUT_POS + m_trims[i] + m_homePos[i]);
+		uint16_t pos = (uint16_t)(NEUT_POS + m_trims[i] + m_homePos[i]);
+		m_servos[i].setPosition(pos);
+		m_pos1[i] = pos;
 	}
 	delay(2000);
 	
@@ -140,32 +144,78 @@ bool MotionController::cmd_pos()
 		DEBUG_PRINT("POS ");
 
 		CmdPos *param = (CmdPos*)m_motion[m_pc].param;
-		uint16_t frame = param->frame;
 		int16_t *pos = param->pos;
+		m_frameNum = param->frame;
+		m_frameCnt = 1;
 
-		// 各サーボ
+		// 各サーボの目標位置
 		for (int i = 0; i < SERVO_NUM; i++){
 			if (pos[i] != POS_NO_CHANGE){
-				m_servos[i].requestPosition(NEUT_POS + m_trims[i] + pos[i]);
+				m_pos2[i] = NEUT_POS + m_trims[i] + pos[i];
 				DEBUG_PRINT(pos[i]);
-				//DEBUG_PRINT(NEUT_POS + m_trims[i] + pos[i]);
 				DEBUG_PRINT(" ");
 			}
 			else{
+				m_pos2[i] = POS_NO_CHANGE;
 				DEBUG_PRINT("POS_NO_CHANGE ");
 			}
 		}
 		DEBUG_PRINT("\n");
 		
-		// 待ち時間セット
-		setTimer(frame * FRAME_TIME);
+		// 中割り
+		for (int i = 0; i < SERVO_NUM; i++){
+			if (pos[i] != POS_NO_CHANGE){
+				int p1 = m_pos1[i];
+				int p2 = m_pos2[i];
+				int p = p1 + (p2 - p1) * m_frameCnt / m_frameNum;
+				m_servos[i].requestPosition(p);
+				//DEBUG_PRINT(p);
+				//DEBUG_PRINT(" ");
+			}
+			else{
+				//DEBUG_PRINT("POS_NO_CHANGE ");
+			}
+		}
+		//DEBUG_PRINT("\n");
+		
+		// タイマ開始
+		startTimer();
 		
 		return false;
 	}
 	// 指定フレーム数待ち
 	else{
-		if (isTimeUp()){
-			return true;
+		// 次フレームか？
+		int frame = getFrameTime();
+		if (frame >= m_frameCnt){
+			m_frameCnt++;
+			// 指定フレーム数完了か？
+			if(m_frameCnt > m_frameNum){
+				for (int i = 0; i < SERVO_NUM; i++){
+					if (m_pos2[i] != POS_NO_CHANGE){
+						m_pos1[i] = m_pos2[i];
+					}
+				}
+				return true;
+			}
+			// 中割り
+			else{
+				for (int i = 0; i < SERVO_NUM; i++){
+					if (m_pos2[i] != POS_NO_CHANGE){
+						int p1 = m_pos1[i];
+						int p2 = m_pos2[i];
+						int p = p1 + (p2 - p1) * m_frameCnt / m_frameNum;
+						m_servos[i].requestPosition(p);
+						//DEBUG_PRINT(p);
+						//DEBUG_PRINT(" ");
+					}
+					else{
+						//DEBUG_PRINT("POS_NO_CHANGE ");
+					}
+				}
+				//DEBUG_PRINT("\n");
+				return false;
+			}
 		}
 		return false;
 	}
@@ -205,7 +255,7 @@ bool MotionController::cmd_set()
 			for (int i = 0; i < SERVO_NUM; i++)
 			{
 				if (val[i] != -1){
-					m_servos[i].setSpeed(val[i]);
+					m_servos[i].setSpeed((uint8_t)val[i]);
 					DEBUG_PRINT(val[i]);
 				}else{
 					DEBUG_PRINT("NO");
@@ -391,6 +441,27 @@ bool MotionController::cmd_halt()
 	return false;
 }
 
+// タイマー開始
+void MotionController::startTimer()
+{
+	// 開始時刻[usec]
+	m_time_s = (uint32_t)micros();
+}
+
+// 経過フレーム時間取得
+int MotionController::getFrameTime()
+{
+	// 現在時刻[usec]
+	uint32_t now = (uint32_t)micros();
+	// 経過時間[usec]
+	uint32_t elapsed = now - m_time_s;
+	// 経過フレーム
+	int frame = elapsed / 1000 / FRAME_TIME;
+	
+	return frame;
+}
+
+#if 0
 // 時間待ちセット
 // ms: 待ち時間[ms]
 void MotionController::setTimer(int ms)
@@ -425,4 +496,4 @@ bool MotionController::isTimeUp()
 	}
 	return false;
 }
-
+#endif

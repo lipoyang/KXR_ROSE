@@ -134,8 +134,10 @@ private:
 	bool cmd_ret();		// 復帰命令
 	bool cmd_halt();	// 停止命令
 	// タイマ処理
-	void setTimer(int ms);	// 時間待ちセット
-	bool isTimeUp();		// 時間待ちチェック
+	void startTimer();		// タイマー開始
+	int getFrameTime();		// 経過フレーム時間取得
+//	void setTimer(int ms);	// 時間待ちセット
+//	bool isTimeUp();		// 時間待ちチェック
 
 private:
 	const MotionData *m_motion;	// 実行中のモーションデータへのポインタ
@@ -147,12 +149,17 @@ private:
 	uint32_t m_button;			// ボタンフラグ
 	
 	IcsServo *m_servos;					// ICSサーボの配列へのポインタ
-	int16_t m_trims[SERVO_NUM];			// ICSサーボのトリム位置の配列
-	int16_t m_homePos[SERVO_NUM];		// ICSサーボのホーム位置の配列
+	int16_t m_trims[SERVO_NUM];			// ICSサーボのトリム位置(ニュートラル位置からのオフセット)
+	int16_t m_homePos[SERVO_NUM];		// ICSサーボのホーム位置(トリム位置からのオフセット)
 	uint8_t m_homeStretch[SERVO_NUM];	// ICSサーボのホームストレッチの配列
 	
+	uint16_t m_pos1[SERVO_NUM];			// ICSサーボの起点位置(POSコマンド移動前の位置)
+	uint16_t m_pos2[SERVO_NUM];			// ICSサーボの目標位置(POSコマンド移動後の位置)
+	int m_frameNum;						// フレーム数
+	int m_frameCnt;						// フレーム数カウンタ
+	
 	uint32_t m_time_s;	// タイマ開始時刻
-	uint32_t m_time_e;	// タイマ終了時刻
+//	uint32_t m_time_e;	// タイマ終了時刻
 };
 
 #endif

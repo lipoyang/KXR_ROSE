@@ -414,7 +414,6 @@ namespace M220{
 //TODO    const CmdPos Free1={  1,{32767,32767,32767,32767,32767,32767,32767,32767,25268,25268,25268,25268,25268,25268,32767,32767}};
     const CmdJump CmpButton1={COND_BTN, BTN_L1|BTN_R1, -1};
 //TODO    const CmdPos Hold1={  1,{32767,32767,32767,32767,32767,32767,32767,32767,25267,25267,25267,25267,25267,25267,32767,32767}};
-    const CmdSet ServoParam1={SET_SPEED,  { 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64}};
     const CmdPos Pos3={ 10,{    0,    0,    0,    0,-1200,-1200,    0,    0, 1800, 1800, 3600, 3600, 1800, 1800,    0,    0}};
     const CmdPos Pos4={ 20,{ -300,  300,    0,    0,-1200,-1200,    0,    0, 1600, 1600, 2900, 2900, 1500, 1500,    0,    0}};
     const CmdPos Pos5={ 15,{    0,    0,    0,    0,-1200,-1200,    0,    0, 1500, 1500, 2000, 2000, 1000, 1000,    0,    0}};
@@ -426,7 +425,6 @@ namespace M220{
 //TODO        { CMD_POS, (void*)&Free1 },
         { CMD_JUMP,(void*)&CmpButton1 },
 //TODO        { CMD_POS, (void*)&Hold1 },
-//        { CMD_SET, (void*)&ServoParam1 },
         { CMD_POS, (void*)&Pos3 },
         { CMD_POS, (void*)&Pos4 },
         { CMD_POS, (void*)&Pos5 },
@@ -438,14 +436,12 @@ namespace M220{
 
 // L1+□: あいさつ
 namespace M301{
-    const CmdSet ServoParam1={SET_SPEED,  { 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64}};
     const CmdPos Pos0={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
     const CmdPos Pos1={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0}};
     const CmdPos Pos2={100,{  400, -400,    0,    0,-1200,-1200,    0,    0, 1500, 1500,    0,    0,    0,    0,    0,    0}};
     const CmdPos Pos3={ 50,{  400, -400,    0,    0,-1200,-1200,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0}};
     const CmdPos HomePos={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
     const MotionData motion[] = {
-//        { CMD_SET, (void*)&ServoParam1 },
         { CMD_POS, (void*)&Pos0 },
         { CMD_POS, (void*)&Pos1 },
         { CMD_POS, (void*)&Pos2 },
@@ -458,7 +454,6 @@ namespace M301{
 // L1+○: 手を振る
 namespace M302{
     const CmdCnt SetCnt={ 0, 3};
-    const CmdSet ServoParam1={SET_SPEED,  { 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64}};
     const CmdPos Pos1={ 40,{-3800, -400,    0,    0,-1200,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
     const CmdPos Pos2={ 40,{-3800, -400, -400,    0,-1200,-1200,    0,    0,  350,  150,  700,  300,  350,  150,  150,  150}};
     const CmdPos Pos3={ 40,{-3800, -400,  800,    0,-1200,-1200,    0,    0,  350,  150,  700,  300,  350,  150,  150,  150}};
@@ -468,7 +463,6 @@ namespace M302{
     const CmdPos HomePos={ 40,{  400, -400,    0,    0,-1200,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
     const MotionData motion[] = {
         { CMD_CNT, (void*)&SetCnt },
-        { CMD_SET, (void*)&ServoParam1 },
         { CMD_POS, (void*)&Pos1 },
         { CMD_POS, (void*)&Pos2 },
         { CMD_POS, (void*)&Pos3 },
