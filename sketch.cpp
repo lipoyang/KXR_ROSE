@@ -3,6 +3,9 @@
 #include "ICS.h"
 #include "MotionController.h"
 #include "Motion.h"
+#include "common.h"
+#include "UdpComm.h"
+#include "ESP8266Writer.h"
 
 // ICSサーボ
 IcsController ics1(Serial1); // 右半身系統
@@ -30,9 +33,52 @@ const uint8_t HOME_STRETCH[SERVO_NUM]={
       20,   20,   20,   20,   65,   65,   65,   65,   65,   65,   65,   65,   65,   65,   65,   65
 };
 
+// ESP8266 Flash
+ESP8266Writer esp_writer;
+// UDP通信クラス
+UdpComm udpComm;
+// UDP受信コールバック
+void udpComm_callback(char* buff);
+
+// 送信バッファ
+static char txbuff[256];
+
+/**
+ * バッテリー電圧チェック （ダミー）
+ */
+void battery_check()
+{
+	static int cnt1 = 0;
+	static int cnt2 = 0;
+	
+	// 100msecごとに電圧値測定
+	cnt1++;
+	if(cnt1 < 100) return;
+	cnt1 = 0;
+
+	unsigned short Vbat_ave = 573; // 573 = 3.7V
+
+	// 1秒ごとに電圧値送信
+	cnt2++;
+	if(cnt2 >= 10)
+	{
+		cnt2=0;
+		
+		txbuff[0]='#';
+		txbuff[1]='B';
+		Uint16ToHex(&txbuff[2], Vbat_ave, 3);
+		txbuff[5]='$';
+		txbuff[6]='\0';
+		udpComm.send(txbuff);
+	}
+}
+
 // 初期化
 void setup()
 {
+	// 起動時にピン21がLOWならESP8266書き込みモードへ(復帰しない)
+	esp_writer.begin(21);
+	
 	Serial.begin(115200);
 
 	// ICSサーボの初期化
@@ -58,6 +104,10 @@ void setup()
 	}
 	// ホームポジションに移動
 	motionCtrl.standHome();
+	
+	// UDP通信の設定
+	udpComm.begin();
+	udpComm.onReceive = udpComm_callback;
 }
 
 // メインループ
@@ -85,4 +135,74 @@ void loop()
 		if(c == 'l') motionCtrl.setButton(BTN_CIRCLE);
 		if(c == ' ') motionCtrl.clrButton(BTN_ALL);
 	}
+	
+	// UDP通信
+	udpComm.loop();
+	
+	// バッテリーチェック(ダミー)
+	//battery_check();
 }
+
+/**
+ * 受信したコマンドの実行
+ *
+ * @param buff 受信したコマンドへのポインタ
+ */
+void udpComm_callback(char* buff)
+{
+	unsigned short val;
+	int sval;
+	
+	Serial.print("udpComm_callback:");Serial.println(buff);
+	
+	switch(buff[0])
+	{
+	/* Dコマンド(前進/後退)
+	   書式: #Dxx$
+	   xx: 0のとき停止、正のとき前進、負のとき後退。
+	 */
+	case 'D':
+		// 値の解釈
+		if( HexToUint16(&buff[1], &val, 2) != 0 ) break;
+		sval = (int)((signed char)val);
+		Serial.print("D:");
+		Serial.println(sval);
+		
+		if(sval > 64){
+			motionCtrl.setButton(BTN_UP);
+			motionCtrl.clrButton(BTN_DOWN);
+		}else if(sval < -64){
+			motionCtrl.clrButton(BTN_UP);
+			motionCtrl.setButton(BTN_DOWN);
+		}else{
+			motionCtrl.clrButton(BTN_UP);
+			motionCtrl.clrButton(BTN_DOWN);
+		}
+		break;
+		
+	/* Tコマンド(旋回)
+	   書式: #Txxn$
+	   n: 4WSモード。0のとき後輪固定、1のとき同相、2のとき逆相
+	   xx: 0のとき中立、正のとき右旋回、負のとき左旋回
+	 */
+	case 'T':
+		// 値の解釈
+		if( HexToUint16(&buff[1], &val, 2) != 0 ) break;
+		sval = (int)((signed char)val);
+		Serial.print("T:");
+		Serial.println(sval);
+		
+		if(sval > 64){
+			motionCtrl.setButton(BTN_RIGHT);
+			motionCtrl.clrButton(BTN_LEFT);
+		}else if(sval < -64){
+			motionCtrl.clrButton(BTN_RIGHT);
+			motionCtrl.setButton(BTN_LEFT);
+		}else{
+			motionCtrl.clrButton(BTN_RIGHT);
+			motionCtrl.clrButton(BTN_LEFT);
+		}
+		break;
+	}
+}
+
