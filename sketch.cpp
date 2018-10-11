@@ -95,6 +95,10 @@ void setup()
 	motionCtrl.setHome(HOME_POS, HOME_STRETCH);
 	motionCtrl.begin(M000::motion);
 	
+	// UDP通信の設定
+	udpComm.begin();
+	udpComm.onReceive = udpComm_callback;
+	
 	while(1)
 	{
 		if(Serial.available() > 0){
@@ -104,10 +108,6 @@ void setup()
 	}
 	// ホームポジションに移動
 	motionCtrl.standHome();
-	
-	// UDP通信の設定
-	udpComm.begin();
-	udpComm.onReceive = udpComm_callback;
 }
 
 // メインループ
@@ -150,58 +150,23 @@ void loop()
  */
 void udpComm_callback(char* buff)
 {
-	unsigned short val;
+	uint16_t val;
 	int sval;
 	
 	Serial.print("udpComm_callback:");Serial.println(buff);
 	
 	switch(buff[0])
 	{
-	/* Dコマンド(前進/後退)
+	/* Dコマンド(デジタルボタン)
 	   書式: #Dxx$
 	   xx: 0のとき停止、正のとき前進、負のとき後退。
 	 */
 	case 'D':
 		// 値の解釈
-		if( HexToUint16(&buff[1], &val, 2) != 0 ) break;
-		sval = (int)((signed char)val);
+		if( HexToUint16(&buff[1], &val, 4) != 0 ) break;
 		Serial.print("D:");
-		Serial.println(sval);
-		
-		if(sval > 64){
-			motionCtrl.setButton(BTN_UP);
-			motionCtrl.clrButton(BTN_DOWN);
-		}else if(sval < -64){
-			motionCtrl.clrButton(BTN_UP);
-			motionCtrl.setButton(BTN_DOWN);
-		}else{
-			motionCtrl.clrButton(BTN_UP);
-			motionCtrl.clrButton(BTN_DOWN);
-		}
-		break;
-		
-	/* Tコマンド(旋回)
-	   書式: #Txxn$
-	   n: 4WSモード。0のとき後輪固定、1のとき同相、2のとき逆相
-	   xx: 0のとき中立、正のとき右旋回、負のとき左旋回
-	 */
-	case 'T':
-		// 値の解釈
-		if( HexToUint16(&buff[1], &val, 2) != 0 ) break;
-		sval = (int)((signed char)val);
-		Serial.print("T:");
-		Serial.println(sval);
-		
-		if(sval > 64){
-			motionCtrl.setButton(BTN_RIGHT);
-			motionCtrl.clrButton(BTN_LEFT);
-		}else if(sval < -64){
-			motionCtrl.clrButton(BTN_RIGHT);
-			motionCtrl.setButton(BTN_LEFT);
-		}else{
-			motionCtrl.clrButton(BTN_RIGHT);
-			motionCtrl.clrButton(BTN_LEFT);
-		}
+		Serial.println(val);
+		motionCtrl.movButton(val);
 		break;
 	}
 }

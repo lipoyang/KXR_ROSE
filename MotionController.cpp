@@ -117,8 +117,8 @@ void MotionController::loop()
 	}
 }
 
-// ボタンフラグをセットする
-// buttonNo: ボタン番号
+// ボタンフラグの値をセットする(ONする)
+// buttonFlag: ボタンフラグ
 void MotionController::setButton(uint32_t buttonFlag)
 {
 	//DEBUG_PRINT("BUTTON ON: ");
@@ -126,13 +126,22 @@ void MotionController::setButton(uint32_t buttonFlag)
 	m_button |= buttonFlag;
 }
 
-// ボタンフラグをクリアする
-// buttonNo: ボタン番号
+// ボタンフラグの値をクリアする(OFFする)
+// buttonFlag: ボタンフラグ
 void MotionController::clrButton(uint32_t buttonFlag)
 {
 	//DEBUG_PRINT("BUTTON OFF: ");
 	//DEBUG_PRINTLN(buttonFlag);
 	m_button &= ~buttonFlag;
+}
+
+// ボタンフラグの値を格納する(ON/OFFする)
+// buttonFlag: ボタンフラグ
+void MotionController::movButton(uint32_t buttonFlag)
+{
+	//DEBUG_PRINT("BUTTON MOV: ");
+	//DEBUG_PRINTLN(buttonFlag);
+	m_button = buttonFlag;
 }
 
 // ポジション設定命令

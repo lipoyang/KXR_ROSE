@@ -119,10 +119,12 @@ public:
 	void standHome();
 	// メインループから呼ぶ
 	void loop();
-	// ボタンフラグをセットする
+	// ボタンフラグの値をセットする(ONする)
 	void setButton(uint32_t buttonBit);
-	// ボタンフラグをクリアする
+	// ボタンフラグの値をクリアする(OFFする)
 	void clrButton(uint32_t buttonBit);
+	// ボタンフラグの値を格納する(ON/OFFする)
+	void movButton(uint32_t buttonBit);
 
 private:
 	// 各コマンド処理
