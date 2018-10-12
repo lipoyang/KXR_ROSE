@@ -125,7 +125,7 @@ namespace M004{
     };
 }
 
-// L1+↑: 歩行少し前
+// X+↑: 歩行少し前
 namespace M011{
     const CmdSet ServoParam1={SET_STRETCH,{ -1, -1, -1, -1, -1, -1, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60}};
     const CmdPos Pos1={  5,{  400, -400,    0,    0,-1200,-1200,    0,    0,  150,  250,  300,  500,  150,  250, -200, -150}};
@@ -164,7 +164,7 @@ namespace M011{
     };
 }
 
-// L1+↓: 歩行少し後
+// X+↓: 歩行少し後
 namespace M012{
     const CmdSet ServoParam1={SET_STRETCH,{ -1, -1, -1, -1, -1, -1, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60}};
     const CmdPos Pos1={  5,{  400, -400,    0,    0,-1200,-1200,    0,    0,  150,  250,  300,  500,  150,  250, -200, -150}};
@@ -203,7 +203,7 @@ namespace M012{
     };
 }
 
-// L1+←: 歩行少し左
+// X+←: 歩行少し左
 namespace M013{
     const CmdPos Pos1={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0,    0,  500,  -50, 1000,    0,  500,  150,    0}};
     const CmdPos Pos2={  3,{  400, -400,    0,    0,-1200,-1200, -100,  200,    0,  500,  -50, 1000,    0,  500,    0,  150}};
@@ -224,7 +224,7 @@ namespace M013{
     };
 }
 
-// L1+→: 歩行少し右
+// X+→: 歩行少し右
 namespace M014{
     const CmdPos Pos1={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0,  500,    0, 1000,  -50,  500,    0,    0, -150}};
     const CmdPos Pos2={  3,{  400, -400,    0,    0,-1200,-1200, -200,  100,  500,    0, 1000,  -50,  500,    0, -150,    0}};
@@ -279,7 +279,7 @@ namespace M022{
     };
 }
 
-// R1+↑: 起き上がり(仰向け)
+// B+↑: 起き上がり(仰向け)
 namespace M101{
     const CmdSet ServoParam1={SET_STRETCH,{127,127, -1, -1, -1, -1, -1, -1,127,127,127,127,127,127, -1, -1}};
     const CmdPos Pos1={ 10,{    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0}};
@@ -308,7 +308,7 @@ namespace M101{
     };
 }
 
-// R1+↓: 起き上がり(うつ伏せ)
+// B+↓: 起き上がり(うつ伏せ)
 namespace M102{
     const CmdSet ServoParam1={SET_SPEED,{ -1, -1, -1, -1, -1, -1, -1, -1,127,127,127,127,127,127, -1, -1}};
     const CmdPos Pos1={ 10,{    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0}};
@@ -343,11 +343,11 @@ namespace M102{
     };
 }
 
-// L1+△: パンチ左ストレート
+// L1: パンチ左ストレート
 namespace M201{
     const CmdPos Pos1={ 20,{ 1200, -668,    0,  561,-3400,-2675, -605,  452, 1800,  -60, 1300,  800, -280, 1221, -485,  612}};
     const CmdPos Pos2={  3,{ 1196, 2839,    4,  589,-3391, -400, -605,  452, 1800,  -60, 1300,  800, -280, 1221, -485,  612}};
-    const CmdJump CmpButton1={COND_BTN, BTN_L1|BTN_TRNGL, -1};
+    const CmdJump CmpButton1={COND_BTN, BTN_L1, -1};
     const CmdPos HomePos={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
     const MotionData motion[] = {
         { CMD_POS, (void*)&Pos1 },
@@ -358,13 +358,13 @@ namespace M201{
     };
 }
 
-// R1+△: パンチ右ストレート
+// R1: パンチ右ストレート
 namespace M202{
     const CmdSet ServoParam1={SET_SPEED,{127,127, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}};
     const CmdSet ServoParam2={SET_STRETCH,{127,127, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}};
     const CmdPos Pos1={ 20,{  668,-1200,  561,    4,-2675,-3400, -452,  605,  -60, 1800,  800, 1300, 1221, -280, -612,  485}};
     const CmdPos Pos2={  1,{-2839,-1200,  589,    0, -400,-3400, -452,  605,  -60, 1800,  800, 1300, 1221, -280, -612,  485}};
-    const CmdJump CmpButton1={COND_BTN, BTN_R1|BTN_TRNGL, -1};
+    const CmdJump CmpButton1={COND_BTN, BTN_R1, -1};
     const CmdPos HomePos={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
     const MotionData motion[] = {
         { CMD_SET, (void*)&ServoParam1 },
@@ -377,11 +377,11 @@ namespace M202{
     };
 }
 
-// L1+×: パンチ左裏拳
+// A+←: パンチ左裏拳
 namespace M211{
     const CmdPos Pos1={  5,{  400,-1500,    0,  700,-1200,-3000,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
     const CmdPos Pos2={  3,{ -400,  937,  360, 2811,-1200, -505, -827,  415,  -22,  741,   56, 1246,  173,  649, -541,  405}};
-    const CmdJump CmpButton1={COND_BTN, BTN_L1|BTN_CROSS, -1};
+    const CmdJump CmpButton1={COND_BTN, BTN_A|BTN_LEFT, -1};
     const CmdPos HomePos={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
     const MotionData motion[] = {
         { CMD_POS, (void*)&Pos1 },
@@ -392,11 +392,11 @@ namespace M211{
     };
 }
 
-// R1+×: パンチ右裏拳
+// A+→: パンチ右裏拳
 namespace M212{
     const CmdPos Pos1={  5,{ 1500, -400,  700,    0,-3400,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
     const CmdPos Pos2={  3,{ -649, -400, 2811,  360, -505,-1200, -415,  827,  250,   -9,  800,  195,  500,  247, -541,  733}};
-    const CmdJump CmpButton1={COND_BTN, BTN_R1|BTN_CROSS, -1};
+    const CmdJump CmpButton1={COND_BTN, BTN_A|BTN_RIGHT, -1};
     const CmdPos HomePos={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
     const MotionData motion[] = {
         { CMD_POS, (void*)&Pos1 },
@@ -407,12 +407,12 @@ namespace M212{
     };
 }
 
-// L1+R1: 防御
+// A+↓: 防御
 namespace M220{
     const CmdPos Pos1={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0, 1360, 1360, 1800, 1800, 1080, 1080,    0,    0}};
     const CmdPos Pos2={ 25,{-1700, 1700, -200, -200,-3300,-3300,    0,    0, 1900, 2952, 3800, 3580, 1900,  681,    0,  -10}};
 //TODO    const CmdPos Free1={  1,{32767,32767,32767,32767,32767,32767,32767,32767,25268,25268,25268,25268,25268,25268,32767,32767}};
-    const CmdJump CmpButton1={COND_BTN, BTN_L1|BTN_R1, -1};
+    const CmdJump CmpButton1={COND_BTN, BTN_A|BTN_DOWN, -1};
 //TODO    const CmdPos Hold1={  1,{32767,32767,32767,32767,32767,32767,32767,32767,25267,25267,25267,25267,25267,25267,32767,32767}};
     const CmdPos Pos3={ 10,{    0,    0,    0,    0,-1200,-1200,    0,    0, 1800, 1800, 3600, 3600, 1800, 1800,    0,    0}};
     const CmdPos Pos4={ 20,{ -300,  300,    0,    0,-1200,-1200,    0,    0, 1600, 1600, 2900, 2900, 1500, 1500,    0,    0}};
@@ -434,7 +434,7 @@ namespace M220{
     };
 }
 
-// L1+□: あいさつ
+// Y+↑: あいさつ
 namespace M301{
     const CmdPos Pos0={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
     const CmdPos Pos1={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0}};
@@ -451,7 +451,7 @@ namespace M301{
     };
 }
 
-// L1+○: 手を振る
+// Y+↓: 手を振る
 namespace M302{
     const CmdCnt SetCnt={ 0, 3};
     const CmdPos Pos1={ 40,{-3800, -400,    0,    0,-1200,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
@@ -474,7 +474,7 @@ namespace M302{
     };
 }
 
-// R1+□: 腕立て
+// Y+←: 腕立て
 namespace M401{
     const CmdCnt SetCnt={ 0, 3};
     const CmdPos Pos1={ 50,{    0,    0,    0,   10, -800, -800,    0,    0, 1900, 1900, 3800, 3800, 1900, 1900,    0,    0}};
@@ -513,7 +513,7 @@ namespace M401{
     };
 }
 
-// R1+○: 前転
+// Y+→: 前転
 namespace M402{
     const CmdSet ServoParam1={SET_STRETCH,{127,127, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}};
     const CmdPos Pos1={ 50,{    0,    0,    0,   10, -800, -800,    0,    0, 1900, 1900, 3800, 3800, 1900, 1900,    0,    0}};
@@ -570,23 +570,23 @@ namespace M000{
     const CmdCall CallM002 ={COND_BTN, BTN_DOWN,         M002::motion}; // ↓: 歩行後
     const CmdCall CallM003 ={COND_BTN, BTN_LEFT,         M003::motion}; // ←: 歩行左
     const CmdCall CallM004 ={COND_BTN, BTN_RIGHT,        M004::motion}; // →: 歩行右
-    const CmdCall CallM011 ={COND_BTN, BTN_L1|BTN_UP,    M011::motion}; // L1+↑: 歩行少し前
-    const CmdCall CallM012 ={COND_BTN, BTN_L1|BTN_DOWN,  M012::motion}; // L1+↓: 歩行少し後
-    const CmdCall CallM013 ={COND_BTN, BTN_L1|BTN_LEFT,  M013::motion}; // L1+←: 歩行少し左
-    const CmdCall CallM014 ={COND_BTN, BTN_L1|BTN_RIGHT, M014::motion}; // L1+→: 歩行少し右
+    const CmdCall CallM011 ={COND_BTN, BTN_X|BTN_UP,     M011::motion}; // X+↑: 歩行少し前
+    const CmdCall CallM012 ={COND_BTN, BTN_X|BTN_DOWN,   M012::motion}; // X+↓: 歩行少し後
+    const CmdCall CallM013 ={COND_BTN, BTN_X|BTN_LEFT,   M013::motion}; // X+←: 歩行少し左
+    const CmdCall CallM014 ={COND_BTN, BTN_X|BTN_RIGHT,  M014::motion}; // X+→: 歩行少し右
     const CmdCall CallM021 ={COND_BTN, BTN_L2,           M021::motion}; // L2: 歩行左旋回
     const CmdCall CallM022 ={COND_BTN, BTN_R2,           M022::motion}; // R2: 歩行右旋回
-    const CmdCall CallM101 ={COND_BTN, BTN_R1|BTN_UP,    M101::motion}; // R1+↑: 起き上がり(仰向け)
-    const CmdCall CallM102 ={COND_BTN, BTN_R1|BTN_DOWN,  M102::motion}; // R1+↓: 起き上がり(うつ伏せ)
-    const CmdCall CallM201 ={COND_BTN, BTN_L1|BTN_TRNGL, M201::motion}; // L1+△: パンチ左ストレート
-    const CmdCall CallM202 ={COND_BTN, BTN_R1|BTN_TRNGL, M202::motion}; // R1+△: パンチ右ストレート
-    const CmdCall CallM211 ={COND_BTN, BTN_L1|BTN_CROSS, M211::motion}; // L1+×: パンチ左裏拳
-    const CmdCall CallM212 ={COND_BTN, BTN_R1|BTN_CROSS, M212::motion}; // R1+×: パンチ右裏拳
-    const CmdCall CallM220 ={COND_BTN, BTN_L1|BTN_R1,    M220::motion}; // L1+R1: 防御
-    const CmdCall CallM301 ={COND_BTN, BTN_L1|BTN_SQUARE,M301::motion}; // L1+□: あいさつ
-    const CmdCall CallM302 ={COND_BTN, BTN_L1|BTN_CIRCLE,M302::motion}; // L1+○: 手を振る
-    const CmdCall CallM401 ={COND_BTN, BTN_R1|BTN_SQUARE,M401::motion}; // R1+□: 腕立て
-    const CmdCall CallM402 ={COND_BTN, BTN_R1|BTN_CIRCLE,M402::motion}; // R1+○: 前転
+    const CmdCall CallM201 ={COND_BTN, BTN_L1,           M201::motion}; // L1: パンチ左ストレート
+    const CmdCall CallM202 ={COND_BTN, BTN_R1,           M202::motion}; // R1: パンチ右ストレート
+    const CmdCall CallM211 ={COND_BTN, BTN_A|BTN_DOWN,   M220::motion}; // A+↓: 防御
+    const CmdCall CallM212 ={COND_BTN, BTN_A|BTN_LEFT,   M211::motion}; // A+←: パンチ左裏拳
+    const CmdCall CallM220 ={COND_BTN, BTN_A|BTN_RIGHT,  M212::motion}; // A+→: パンチ右裏拳
+    const CmdCall CallM101 ={COND_BTN, BTN_B|BTN_UP,     M101::motion}; // B+↑: 起き上がり(仰向け)
+    const CmdCall CallM102 ={COND_BTN, BTN_B|BTN_DOWN,   M102::motion}; // B+↓: 起き上がり(うつ伏せ)
+    const CmdCall CallM301 ={COND_BTN, BTN_Y|BTN_UP,     M301::motion}; // Y+↑: あいさつ
+    const CmdCall CallM302 ={COND_BTN, BTN_Y|BTN_DOWN,   M302::motion}; // Y+↓: 手を振る
+    const CmdCall CallM401 ={COND_BTN, BTN_Y|BTN_LEFT,   M401::motion}; // Y+←: 腕立て
+    const CmdCall CallM402 ={COND_BTN, BTN_Y|BTN_RIGHT,  M402::motion}; // Y+→: 前転
     const CmdJump Jump1 ={COND_NONE, 0, -22};
     
     const MotionData motion[] = {

@@ -18,10 +18,10 @@
 #define BTN_DOWN	0x0002	// ↓
 #define BTN_RIGHT	0x0004	// →
 #define BTN_LEFT	0x0008	// ←
-#define BTN_TRNGL	0x0010	// △
-#define BTN_CROSS	0x0020	// ×
-#define BTN_CIRCLE	0x0040	// ○
-#define BTN_SQUARE	0x0080	// □
+#define BTN_Y		0x0010	// Y
+#define BTN_A		0x0020	// A
+#define BTN_B		0x0040	// B
+#define BTN_X		0x0080	// X
 #define BTN_R1		0x0100	// R1
 #define BTN_R2		0x0200	// R2
 #define BTN_L1		0x0400	// L1

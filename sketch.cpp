@@ -129,10 +129,10 @@ void loop()
 		if(c == 's') motionCtrl.setButton(BTN_DOWN);
 		if(c == 'd') motionCtrl.setButton(BTN_UP);
 		if(c == 'f') motionCtrl.setButton(BTN_RIGHT);
-		if(c == 'h') motionCtrl.setButton(BTN_SQUARE);
-		if(c == 'j') motionCtrl.setButton(BTN_CROSS);
-		if(c == 'k') motionCtrl.setButton(BTN_TRNGL);
-		if(c == 'l') motionCtrl.setButton(BTN_CIRCLE);
+		if(c == 'h') motionCtrl.setButton(BTN_X);
+		if(c == 'j') motionCtrl.setButton(BTN_A);
+		if(c == 'k') motionCtrl.setButton(BTN_Y);
+		if(c == 'l') motionCtrl.setButton(BTN_B);
 		if(c == ' ') motionCtrl.clrButton(BTN_ALL);
 	}
 	
