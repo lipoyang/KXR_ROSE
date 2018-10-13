@@ -44,7 +44,7 @@ void udpComm_callback(char* buff);
 static char txbuff[256];
 
 /**
- * バッテリー電圧チェック （ダミー）
+ * バッテリー電圧チェック （仮）
  */
 void battery_check()
 {
@@ -56,6 +56,7 @@ void battery_check()
 	if(cnt1 < 100) return;
 	cnt1 = 0;
 
+	// 仮の固定値
 	unsigned short Vbat_ave = 573; // 573 = 3.7V
 
 	// 1秒ごとに電圧値送信
@@ -99,11 +100,17 @@ void setup()
 	udpComm.begin();
 	udpComm.onReceive = udpComm_callback;
 	
+	// シリアル通信で's'を受信するか
+	// ピン20がHIGHであれば動作開始
+	pinMode(20, INPUT_PULLUP);
 	while(1)
 	{
 		if(Serial.available() > 0){
 			char c = Serial.read();
 			if(c == 's') break;
+		}
+		if(digitalRead(20) == HIGH){
+			break;
 		}
 	}
 	// ホームポジションに移動
@@ -139,8 +146,8 @@ void loop()
 	// UDP通信
 	udpComm.loop();
 	
-	// バッテリーチェック(ダミー)
-	//battery_check();
+	// バッテリーチェック(仮)
+	battery_check();
 }
 
 /**
