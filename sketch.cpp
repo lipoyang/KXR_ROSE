@@ -95,7 +95,16 @@ void setup()
 	motionCtrl.setTrim(TRIM_POS);
 	motionCtrl.setHome(HOME_POS, HOME_STRETCH);
 	motionCtrl.begin(M000::motion);
-	
+/*	
+	while(1){
+		for(int i=0;i<SERVO_NUM;i++){
+			uint16_t pos = servos[i].getPosition();
+			Serial.print(pos);Serial.print(" ");
+		}
+		Serial.println(" ");
+		delay(1000);
+	}
+*/	
 	// UDP通信の設定
 	udpComm.begin();
 	udpComm.onReceive = udpComm_callback;

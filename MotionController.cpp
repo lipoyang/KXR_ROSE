@@ -59,21 +59,48 @@ void MotionController::standTrim()
 // ホーム位置に移動する
 void MotionController::standHome()
 {
+	// ホームストレッチの設定
 	for(int i=0;i<SERVO_NUM;i++){
 		m_servos[i].setStretch(m_homeStretch[i]);
 	}
+	// ホームポジションの計算
 	for(int i=0;i<SERVO_NUM;i++){
-		m_servos[i].setSpeed(32);
+		m_pos2[i] = (uint16_t)(NEUT_POS + m_trims[i] + m_homePos[i]);
 	}
+
+	// 現在位置の取得
 	for(int i=0;i<SERVO_NUM;i++){
-		uint16_t pos = (uint16_t)(NEUT_POS + m_trims[i] + m_homePos[i]);
-		m_servos[i].setPosition(pos);
-		m_pos1[i] = pos;
+		uint16_t pos = 0xFFFF;
+		for(int j=0;j<3;j++){ // たまに失敗するのでリトライ
+			pos = m_servos[i].getPosition();
+			if((pos >= 3500) && (pos <= 11500)){
+			    continue;
+			}
+			delay(10);
+		}
+		if((pos >= 3500) && (pos <= 11500)){
+		    m_pos1[i] = pos;
+		}else{
+		    m_pos1[i] = m_pos2[i]; // 取得失敗したらホームポジション
+		}
+		//Serial.print(m_pos1[i]);Serial.print(" ");
 	}
-	delay(2000);
+	//Serial.println(" ");
 	
+	// 中割りして現在位置からホームポジションへ移動
+	m_frameNum = 70;
+	for(m_frameCnt = 0; m_frameCnt <= m_frameNum; m_frameCnt++){
+		for(int i=0;i<SERVO_NUM;i++){
+			int p1 = m_pos1[i];
+			int p2 = m_pos2[i];
+			int p = p1 + (p2 - p1) * m_frameCnt / m_frameNum;
+			m_servos[i].setPosition(p);
+		}
+		delay(FRAME_TIME);
+	}
+	// ホームポジションの計算
 	for(int i=0;i<SERVO_NUM;i++){
-		m_servos[i].setSpeed(127);
+		m_pos1[i] = (uint16_t)(NEUT_POS + m_trims[i] + m_homePos[i]);
 	}
 }
 
