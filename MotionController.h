@@ -58,6 +58,7 @@
 // ポジション定数
 #define POS_NO_CHANGE	0x7FFF // ポジション変更なし
 #define POS_FREE		0x7000 // 脱力
+#define POS_HOLD		0x7001 // 保持
 
 // モーションデータ
 struct MotionData

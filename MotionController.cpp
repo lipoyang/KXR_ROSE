@@ -187,9 +187,30 @@ bool MotionController::cmd_pos()
 		// 脱力指示のときは m_frameNum = 0 とする
 		if(m_frameNum == 0){
 			for (int i = 0; i < SERVO_NUM; i++){
+				// 脱力
 				if (pos[i] == POS_FREE){
 					DEBUG_PRINT("FREE ");
 					m_servos[i].setPosition(0); // 0で脱力
+				}
+				// 保持
+				else if(pos[i] == POS_HOLD){
+					DEBUG_PRINT("HOLD ");
+					// 現在位置取得
+					uint16_t pos = 0xFFFF;
+					for(int j=0;j<3;j++){ // たまに失敗するのでリトライ
+						pos = m_servos[i].getPosition();
+						if((pos >= 3500) && (pos <= 11500)){
+							continue;
+						}
+						delay(10);
+					}
+					if((pos >= 3500) && (pos <= 11500)){
+						m_pos1[i] = pos;
+					}else{
+						// 失敗したらホームポジション
+						m_pos1[i] = (uint16_t)(NEUT_POS + m_trims[i] + m_homePos[i]);
+					}
+					m_servos[i].setPosition(m_pos1[i]);
 				}else{
 					DEBUG_PRINT("NO_CHANGE ");
 				}
@@ -375,7 +396,7 @@ bool MotionController::cmd_jump()
 		// ボタン(一致)
 		case COND_BTN:
 			if (m_button == condParam){
-				DEBUG_PRINT("JUMP BTN ");
+				//DEBUG_PRINT("JUMP BTN ");
 				DEBUG_PRINTLN(m_pc + dest);
 				flag = true;
 			}
@@ -383,7 +404,7 @@ bool MotionController::cmd_jump()
 		// ボタンON
 		case COND_BTN_ON:
 			if ((m_button & condParam) == condParam){
-				DEBUG_PRINT("JUMP BTN_ON ");
+				//DEBUG_PRINT("JUMP BTN_ON ");
 				DEBUG_PRINTLN(m_pc + dest);
 				flag = true;
 			}
