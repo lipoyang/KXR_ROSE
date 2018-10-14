@@ -56,7 +56,8 @@
 #define COND_BTN_OFF	0x04 // ボタンOFF
 
 // ポジション定数
-#define POS_NO_CHANGE	-32768 // ポジション変更なし
+#define POS_NO_CHANGE	0x7FFF // ポジション変更なし
+#define POS_FREE		0x7000 // 脱力
 
 // モーションデータ
 struct MotionData

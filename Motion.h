@@ -411,9 +411,9 @@ namespace M212{
 namespace M220{
     const CmdPos Pos1={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0, 1360, 1360, 1800, 1800, 1080, 1080,    0,    0}};
     const CmdPos Pos2={ 25,{-1700, 1700, -200, -200,-3300,-3300,    0,    0, 1900, 2952, 3800, 3580, 1900,  681,    0,  -10}};
-//TODO    const CmdPos Free1={  1,{32767,32767,32767,32767,32767,32767,32767,32767,25268,25268,25268,25268,25268,25268,32767,32767}};
-    const CmdJump CmpButton1={COND_BTN, BTN_A|BTN_DOWN, -1};
-//TODO    const CmdPos Hold1={  1,{32767,32767,32767,32767,32767,32767,32767,32767,25267,25267,25267,25267,25267,25267,32767,32767}};
+    const CmdPos Free1={  0,{0x7FFF,0x7FFF,0x7FFF,0x7FFF,0x7FFF,0x7FFF,0x7FFF,0x7FFF,0x7000,0x7000,0x7000,0x7000,0x7000,0x7000,0x7FFF,0x7FFF}};
+    const CmdJump CmpButton1={COND_BTN, BTN_A|BTN_DOWN, 0};
+    const CmdPos Hold1={  1,{0x7FFF,0x7FFF,0x7FFF,0x7FFF,0x7FFF,0x7FFF,0x7FFF,0x7FFF, 1900, 2952, 3800, 3580, 1900,  681,0x7FFF,0x7FFF}};
     const CmdPos Pos3={ 10,{    0,    0,    0,    0,-1200,-1200,    0,    0, 1800, 1800, 3600, 3600, 1800, 1800,    0,    0}};
     const CmdPos Pos4={ 20,{ -300,  300,    0,    0,-1200,-1200,    0,    0, 1600, 1600, 2900, 2900, 1500, 1500,    0,    0}};
     const CmdPos Pos5={ 15,{    0,    0,    0,    0,-1200,-1200,    0,    0, 1500, 1500, 2000, 2000, 1000, 1000,    0,    0}};
@@ -422,9 +422,9 @@ namespace M220{
     const MotionData motion[] = {
         { CMD_POS, (void*)&Pos1 },
         { CMD_POS, (void*)&Pos2 },
-//TODO        { CMD_POS, (void*)&Free1 },
+        { CMD_POS, (void*)&Free1 },
         { CMD_JUMP,(void*)&CmpButton1 },
-//TODO        { CMD_POS, (void*)&Hold1 },
+        { CMD_POS, (void*)&Hold1 },
         { CMD_POS, (void*)&Pos3 },
         { CMD_POS, (void*)&Pos4 },
         { CMD_POS, (void*)&Pos5 },

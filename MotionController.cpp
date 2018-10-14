@@ -183,7 +183,21 @@ bool MotionController::cmd_pos()
 		int16_t *pos = param->pos;
 		m_frameNum = param->frame;
 		m_frameCnt = 1;
-
+		
+		// 脱力指示のときは m_frameNum = 0 とする
+		if(m_frameNum == 0){
+			for (int i = 0; i < SERVO_NUM; i++){
+				if (pos[i] == POS_FREE){
+					DEBUG_PRINT("FREE ");
+					m_servos[i].setPosition(0); // 0で脱力
+				}else{
+					DEBUG_PRINT("NO_CHANGE ");
+				}
+			}
+			DEBUG_PRINT("\n");
+			return true;
+		}
+		
 		// 各サーボの目標位置
 		for (int i = 0; i < SERVO_NUM; i++){
 			if (pos[i] != POS_NO_CHANGE){
@@ -193,7 +207,7 @@ bool MotionController::cmd_pos()
 			}
 			else{
 				m_pos2[i] = POS_NO_CHANGE;
-				DEBUG_PRINT("POS_NO_CHANGE ");
+				DEBUG_PRINT("NO_CHANGE ");
 			}
 		}
 		DEBUG_PRINT("\n");
@@ -209,7 +223,7 @@ bool MotionController::cmd_pos()
 				//DEBUG_PRINT(" ");
 			}
 			else{
-				//DEBUG_PRINT("POS_NO_CHANGE ");
+				//DEBUG_PRINT("NO_CHANGE ");
 			}
 		}
 		//DEBUG_PRINT("\n");
@@ -246,7 +260,7 @@ bool MotionController::cmd_pos()
 						//DEBUG_PRINT(" ");
 					}
 					else{
-						//DEBUG_PRINT("POS_NO_CHANGE ");
+						//DEBUG_PRINT("NO_CHANGE ");
 					}
 				}
 				//DEBUG_PRINT("\n");
