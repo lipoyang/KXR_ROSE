@@ -560,6 +560,19 @@ namespace M402{
     };
 }
 
+// A+L1+L2: 全脱力
+namespace M500{
+    const CmdPos Free1={  0,{0x7000,0x7000,0x7000,0x7000,0x7000,0x7000,0x7000,0x7000,0x7000,0x7000,0x7000,0x7000,0x7000,0x7000,0x7000,0x7000}};
+    const CmdJump CmpButton1={COND_BTN_OFF, BTN_B, 0};
+    const CmdPos HomePos={ 10,{  400, -400,    0,    0,-1200,-1200,    0,    0,  150,  150,  300,  300,  150,  150,    0,    0}};
+    const MotionData motion[] = {
+        { CMD_POS, (void*)&Free1 },
+        { CMD_JUMP,(void*)&CmpButton1 },
+        { CMD_POS, (void*)&HomePos },
+        { CMD_RET, NULL }
+    };
+}
+
 // メインモーション
 namespace M000{
     const CmdSet ServoParam1={SET_SPEED,  {127,127,127,127,127,127,127,127,127,127,127,127,127,127,127,127}};
@@ -578,16 +591,17 @@ namespace M000{
     const CmdCall CallM022 ={COND_BTN, BTN_R2,           M022::motion}; // R2: 歩行右旋回
     const CmdCall CallM201 ={COND_BTN, BTN_L1,           M201::motion}; // L1: パンチ左ストレート
     const CmdCall CallM202 ={COND_BTN, BTN_R1,           M202::motion}; // R1: パンチ右ストレート
-    const CmdCall CallM211 ={COND_BTN, BTN_A|BTN_DOWN,   M220::motion}; // A+↓: 防御
-    const CmdCall CallM212 ={COND_BTN, BTN_A|BTN_LEFT,   M211::motion}; // A+←: パンチ左裏拳
-    const CmdCall CallM220 ={COND_BTN, BTN_A|BTN_RIGHT,  M212::motion}; // A+→: パンチ右裏拳
+    const CmdCall CallM220 ={COND_BTN, BTN_A|BTN_DOWN,   M220::motion}; // A+↓: 防御
+    const CmdCall CallM211 ={COND_BTN, BTN_A|BTN_LEFT,   M211::motion}; // A+←: パンチ左裏拳
+    const CmdCall CallM212 ={COND_BTN, BTN_A|BTN_RIGHT,  M212::motion}; // A+→: パンチ右裏拳
     const CmdCall CallM101 ={COND_BTN, BTN_B|BTN_UP,     M101::motion}; // B+↑: 起き上がり(仰向け)
     const CmdCall CallM102 ={COND_BTN, BTN_B|BTN_DOWN,   M102::motion}; // B+↓: 起き上がり(うつ伏せ)
     const CmdCall CallM301 ={COND_BTN, BTN_Y|BTN_UP,     M301::motion}; // Y+↑: あいさつ
     const CmdCall CallM302 ={COND_BTN, BTN_Y|BTN_DOWN,   M302::motion}; // Y+↓: 手を振る
     const CmdCall CallM401 ={COND_BTN, BTN_Y|BTN_LEFT,   M401::motion}; // Y+←: 腕立て
     const CmdCall CallM402 ={COND_BTN, BTN_Y|BTN_RIGHT,  M402::motion}; // Y+→: 前転
-    const CmdJump Jump1 ={COND_NONE, 0, -22};
+    const CmdCall CallM500 ={COND_BTN, BTN_A|BTN_L1|BTN_L2, M500::motion}; // A+L1+L2: 全脱力
+    const CmdJump Jump1 ={COND_NONE, 0, -23};
     
     const MotionData motion[] = {
         { CMD_SET, (void*)&ServoParam1 },
@@ -615,6 +629,7 @@ namespace M000{
         { CMD_CALL, (void*)&CallM302 },
         { CMD_CALL, (void*)&CallM401 },
         { CMD_CALL, (void*)&CallM402 },
+        { CMD_CALL, (void*)&CallM500 },
         { CMD_JUMP, (void*)&Jump1 }
     };
 }
