@@ -476,13 +476,13 @@ namespace M302{
 
 // Y+←: 腕立て
 namespace M401{
-    const CmdCnt SetCnt={ 0, 3};
+    const CmdCnt SetCnt={ 0, 4};
     const CmdPos Pos1={ 50,{    0,    0,    0,   10, -800, -800,    0,    0, 1900, 1900, 3800, 3800, 1900, 1900,    0,    0}};
     const CmdPos Pos2={ 20,{-1300, 1300,    0,   10, -800, -800,    0,    0, 3100, 3100, 3800, 3800, 1900, 1900,    0,    0}};
     const CmdPos Pos3={ 30,{-2100, 2100,    0,   10, -800, -800,    0,    0, 3100, 3100, 2800, 2800, 1900, 1900,    0,    0}};
     const CmdPos Pos4={ 30,{-2000, 2000,    0,   10, -800, -800,    0,    0, 1600, 1600, 2500, 2500, 1900, 1900,    0,    0}};
     const CmdPos Pos5={ 30,{-2000, 2000,    0,    0, -800, -800,    0,    0,  500,  500,  600,  600,   70,   70,    0,    0}};
-    // TODO Wait 0.5sec
+    const CmdWait Wait1={33};
     const CmdPos Pos6={ 40,{-2000, 2000,    0,    0, -800, -800,    0,    0,  500,  500,  600,  600,   70,   70,    0,    0}};
     const CmdPos Pos7={ 15,{ -900,  900,    0,    0,-2400,-2400,    0,    0,  500,  500,  600,  600,   70,   70,    0,    0}};
     const CmdJump Loop={COND_LOOP, 0, -2};
@@ -499,7 +499,7 @@ namespace M401{
         { CMD_POS, (void*)&Pos3 },
         { CMD_POS, (void*)&Pos4 },
         { CMD_POS, (void*)&Pos5 },
-        // TODO
+        { CMD_WAIT, (void*)&Wait1 },
         { CMD_POS, (void*)&Pos6 },
         { CMD_POS, (void*)&Pos7 },
         { CMD_JUMP,(void*)&Loop },
@@ -520,7 +520,7 @@ namespace M402{
     const CmdPos Pos2={ 20,{-1300, 1300,    0,   10, -800, -800,    0,    0, 3100, 3100, 3800, 3800, 1900, 1900,    0,    0}};
     const CmdPos Pos3={ 30,{-2100, 2100,    0,   10, -800, -800,    0,    0, 3100, 3100, 2800, 2800, 1900, 1900,    0,    0}};
     const CmdPos Pos4={ 20,{-3093, 2984,  -72,   14,-3709,-3718,    4,  -18, 3355, -768, -811, 2246, 2234,  401,    4,    4}};
-    // TODO 0.5sec wait
+    const CmdWait Wait1={33};
     const CmdPos Pos5={100,{-4829, 4800,  -72,   14,-3709,-3718,    4,  -18, 3355, -768, -811, 2246, 2234,  401,    4,    4}};
     const CmdPos Pos6={100,{-4500, 4500,  -72,   14,-3709,-3718,    0,    0, -800, -800, 2400, 2400,  200,  200,    0,    0}};
     const CmdPos Pos7={ 60,{-5000, 5000,  -72,   14,-3709,-3718,    0,    0,    0,    0, 2000, 2000, -650, -650,    0,    0}};
@@ -541,7 +541,7 @@ namespace M402{
         { CMD_POS, (void*)&Pos2 },
         { CMD_POS, (void*)&Pos3 },
         { CMD_POS, (void*)&Pos4 },
-        // TODO
+        { CMD_WAIT, (void*)&Wait1 },
         { CMD_POS, (void*)&Pos5 },
         { CMD_POS, (void*)&Pos6 },
         { CMD_POS, (void*)&Pos7 },

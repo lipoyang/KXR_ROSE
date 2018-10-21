@@ -43,6 +43,7 @@
 #define CMD_CALL	0x21 // コール
 #define CMD_RET		0x22 // 復帰
 #define CMD_HALT	0x23 // 停止
+#define CMD_WAIT	0x30 // ウェイト
 
 // パラメータ種別
 #define SET_STRETCH	0x01 // ストレッチ
@@ -104,6 +105,12 @@ struct CmdCall
 	const MotionData* dest;	// 行先
 };
 
+// ウェイト命令のパラメータ
+struct CmdWait
+{
+	uint16_t frame;	// ウェイト時間(フレーム数)
+};
+
 // モーションコントローラ
 class MotionController{
 public:
@@ -137,11 +144,10 @@ private:
 	bool cmd_call();	// コール命令
 	bool cmd_ret();		// 復帰命令
 	bool cmd_halt();	// 停止命令
+	bool cmd_wait();	// ウェイト命令
 	// タイマ処理
 	void startTimer();		// タイマー開始
 	int getFrameTime();		// 経過フレーム時間取得
-//	void setTimer(int ms);	// 時間待ちセット
-//	bool isTimeUp();		// 時間待ちチェック
 
 private:
 	const MotionData *m_motion;	// 実行中のモーションデータへのポインタ
@@ -163,7 +169,6 @@ private:
 	int m_frameCnt;						// フレーム数カウンタ
 	
 	uint32_t m_time_s;	// タイマ開始時刻
-//	uint32_t m_time_e;	// タイマ終了時刻
 };
 
 #endif

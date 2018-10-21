@@ -117,6 +117,9 @@ void MotionController::loop()
 		case CMD_SET:
 			next = cmd_set();
 			break;
+		case CMD_CNT:
+			next = cmd_cnt();
+			break;
 		case CMD_JUMP:
 			next = cmd_jump();
 			break;
@@ -129,8 +132,8 @@ void MotionController::loop()
 		case CMD_HALT:
 			next = cmd_halt();
 			break;
-		case CMD_CNT:
-			next = cmd_cnt();
+		case CMD_WAIT:
+			next = cmd_wait();
 			break;
 	}
 	
@@ -355,10 +358,17 @@ bool MotionController::cmd_cnt()
 	CmdCnt *param = (CmdCnt*)m_motion[m_pc].param;
 	int cnt = param->cnt;
 	int val = param->value;
-
+	
+	DEBUG_PRINT("SET CNT ");
 	if (cnt < CNT_NUM)
 	{
+		DEBUG_PRINT("CNT[");DEBUG_PRINT(cnt);DEBUG_PRINT("]=");DEBUG_PRINTLN(val);
 		m_cnt[cnt] = val;
+	}
+	else
+	{
+		DEBUG_PRINT("BAD PARAMETER ");
+		DEBUG_PRINTLN(cnt);
 	}
 
 	return true;
@@ -384,13 +394,21 @@ bool MotionController::cmd_jump()
 			break;
 		// ループ
 		case COND_LOOP:
+			DEBUG_PRINT("JUMP LOOP ");
 			if (condParam < CNT_NUM){
 				m_cnt[condParam]--;
-				if (m_cnt[condParam] == 0){
+				DEBUG_PRINT("CNT[");DEBUG_PRINT(condParam);	DEBUG_PRINT("] = ");
+				DEBUG_PRINTLN(m_cnt[condParam]);
+				if (m_cnt[condParam] > 0){
 					DEBUG_PRINT("JUMP LOOP ");
 					DEBUG_PRINTLN(m_pc + dest);
 					flag = true;
+				}else{
+					DEBUG_PRINTLN("LOOP END");
 				}
+			}else{
+				DEBUG_PRINT("BAD PARAMETER ");
+				DEBUG_PRINTLN(condParam);
 			}
 			break;
 		// ボタン(一致)
@@ -512,6 +530,38 @@ bool MotionController::cmd_halt()
 	return false;
 }
 
+// ウェイト命令
+bool MotionController::cmd_wait()
+{
+	// ICSコマンド送信
+	if (m_waiting == false){
+		m_waiting = true;
+		DEBUG_PRINT("WAIT\n");
+
+		CmdPos *param = (CmdPos*)m_motion[m_pc].param;
+		m_frameNum = param->frame;
+		m_frameCnt = 1;
+		
+		// タイマ開始
+		startTimer();
+		
+		return false;
+	}
+	// 指定フレーム数待ち
+	else{
+		// 次フレームか？
+		int frame = getFrameTime();
+		if (frame >= m_frameCnt){
+			m_frameCnt++;
+			// 指定フレーム数完了か？
+			if(m_frameCnt > m_frameNum){
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
 // タイマー開始
 void MotionController::startTimer()
 {
@@ -532,39 +582,3 @@ int MotionController::getFrameTime()
 	return frame;
 }
 
-#if 0
-// 時間待ちセット
-// ms: 待ち時間[ms]
-void MotionController::setTimer(int ms)
-{
-	// 開始時刻
-	m_time_s = (uint32_t)micros();
-	// 終了時刻
-	m_time_e = m_time_s + (uint32_t)ms * 1000;
-
-//	DEBUG_PRINT(m_time_s);
-//	DEBUG_PRINT(" ");
-//	DEBUG_PRINT(m_time_e);
-//	DEBUG_PRINT(" ");
-}
-
-// 時間待ちチェック
-bool MotionController::isTimeUp()
-{
-	// 現在時刻
-	uint32_t t = (uint32_t)micros();
-	
-	if(m_time_e > m_time_s){
-		if((t >= m_time_e) || (t < m_time_s)){
-			//DEBUG_PRINTLN(t);
-			return true;
-		}
-	}else{
-		if((t >= m_time_e) && (t < m_time_s)){
-			//DEBUG_PRINTLN(t);
-			return true;
-		}
-	}
-	return false;
-}
-#endif
