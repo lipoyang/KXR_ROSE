@@ -48,29 +48,27 @@ static char txbuff[256];
  */
 void battery_check()
 {
-	static int cnt1 = 0;
-	static int cnt2 = 0;
+	// 現状は固定値(3.7V)送信
 	
-	// 100msecごとに電圧値測定
-	cnt1++;
-	if(cnt1 < 100) return;
-	cnt1 = 0;
-
-	// 仮の固定値
-	unsigned short Vbat_ave = 573; // 573 = 3.7V
-
-	// 1秒ごとに電圧値送信
-	cnt2++;
-	if(cnt2 >= 10)
-	{
-		cnt2=0;
+	static uint32_t s_prev = 0;			// 前回の電圧値送信時刻
+	uint32_t now = (uint32_t)millis();	// 現在時刻[msec]
+	uint32_t elapsed = now - s_prev;	// 経過時間[msec]
+	
+	// 約1秒に1回送信
+	if(elapsed >= 1000){
+		s_prev = now;
 		
+		// 仮の固定値
+		unsigned short Vbat_ave = 573; // 573 = 3.7V
+		
+		// 送信
 		txbuff[0]='#';
 		txbuff[1]='B';
 		Uint16ToHex(&txbuff[2], Vbat_ave, 3);
 		txbuff[5]='$';
 		txbuff[6]='\0';
 		udpComm.send(txbuff);
+		//Serial.println(txbuff);
 	}
 }
 
@@ -133,7 +131,9 @@ void loop()
 	ics1.loop();
 	ics2.loop();
 	
-	delay(1);
+	// TODO
+	delayMicroseconds(SERVO_WAIT);
+	//delay(1);
 	
 	if(Serial.available() > 0){
 		char c = Serial.read();

@@ -71,18 +71,13 @@ void MotionController::standHome()
 	// 現在位置の取得
 	for(int i=0;i<SERVO_NUM;i++){
 		uint16_t pos = 0xFFFF;
-		for(int j=0;j<3;j++){ // たまに失敗するのでリトライ
-			pos = m_servos[i].getPosition();
-			if((pos >= 3500) && (pos <= 11500)){
-			    continue;
-			}
-			delay(10);
-		}
+		pos = m_servos[i].getPosition();
 		if((pos >= 3500) && (pos <= 11500)){
-		    m_pos1[i] = pos;
+			m_pos1[i] = pos;
 		}else{
-		    m_pos1[i] = m_pos2[i]; // 取得失敗したらホームポジション
+			m_pos1[i] = m_pos2[i]; // 取得失敗したらホームポジション
 		}
+		delayMicroseconds(SERVO_WAIT);
 		//Serial.print(m_pos1[i]);Serial.print(" ");
 	}
 	//Serial.println(" ");
@@ -200,20 +195,17 @@ bool MotionController::cmd_pos()
 					DEBUG_PRINT("HOLD ");
 					// 現在位置取得
 					uint16_t pos = 0xFFFF;
-					for(int j=0;j<3;j++){ // たまに失敗するのでリトライ
-						pos = m_servos[i].getPosition();
-						if((pos >= 3500) && (pos <= 11500)){
-							continue;
-						}
-						delay(10);
-					}
+					pos = m_servos[i].getPosition();
 					if((pos >= 3500) && (pos <= 11500)){
 						m_pos1[i] = pos;
 					}else{
 						// 失敗したらホームポジション
 						m_pos1[i] = (uint16_t)(NEUT_POS + m_trims[i] + m_homePos[i]);
 					}
+					delayMicroseconds(SERVO_WAIT);
+					
 					m_servos[i].setPosition(m_pos1[i]);
+					delayMicroseconds(SERVO_WAIT);
 				}else{
 					DEBUG_PRINT("NO_CHANGE ");
 				}
@@ -315,6 +307,7 @@ bool MotionController::cmd_set()
 			{
 				if (val[i] != -1){
 					m_servos[i].setStretch((uint8_t)val[i]);
+					delayMicroseconds(SERVO_WAIT);
 					DEBUG_PRINT((uint8_t)val[i]);
 				}else{
 					DEBUG_PRINT("NO");
@@ -330,6 +323,7 @@ bool MotionController::cmd_set()
 			{
 				if (val[i] != -1){
 					m_servos[i].setSpeed((uint8_t)val[i]);
+					delayMicroseconds(SERVO_WAIT);
 					DEBUG_PRINT(val[i]);
 				}else{
 					DEBUG_PRINT("NO");

@@ -32,6 +32,9 @@
 // 1フレームの時間[ms]
 #define FRAME_TIME 15
 
+// サーボの応答のためのウェイト[usec]
+#define SERVO_WAIT	400
+
 // ニュートラル位置
 #define NEUT_POS 7500
 
