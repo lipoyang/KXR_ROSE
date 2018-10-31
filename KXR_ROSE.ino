@@ -1,11 +1,11 @@
 #include <stdint.h>
 #include <Arduino.h>
-#include "ICS.h"
-#include "MotionController.h"
-#include "Motion.h"
-#include "common.h"
-#include "UdpComm.h"
-#include "ESP8266Writer.h"
+#include "./ICS.h"
+#include "./MotionController.h"
+#include "./Motion.h"
+#include "./common.h"
+#include "./UdpComm.h"
+#include "./ESP8266Writer.h"
 
 // ICSサーボ
 IcsController ics1(Serial1); // 右半身系統
