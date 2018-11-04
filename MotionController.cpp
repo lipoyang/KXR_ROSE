@@ -570,6 +570,9 @@ int MotionController::getFrameTime()
 	uint32_t now = (uint32_t)micros();
 	// 経過時間[usec]
 	uint32_t elapsed = now - m_time_s;
+	if(elapsed > UINT32_MAX/2){ // for GR-ROSE(beta)'s bug
+		elapsed = 0;
+	}
 	// 経過フレーム
 	int frame = elapsed / 1000 / FRAME_TIME;
 	

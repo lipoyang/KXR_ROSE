@@ -131,10 +131,6 @@ void loop()
 	ics1.loop();
 	ics2.loop();
 	
-	// TODO
-	delayMicroseconds(SERVO_WAIT);
-	//delay(1);
-	
 	if(Serial.available() > 0){
 		char c = Serial.read();
 		if(c == '1') motionCtrl.setButton(BTN_L1);
