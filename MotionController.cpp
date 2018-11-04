@@ -10,6 +10,9 @@
 #define DEBUG_PRINTLN(x)	
 #endif
 
+// サーボの応答のためのウェイト[usec] ※現状、一部に同期処理が使われているため
+#define SERVO_WAIT	400
+
 // サーボを設定する
 // servos: ICSサーボの配列
 void MotionController::setServo(IcsServo *servos)
