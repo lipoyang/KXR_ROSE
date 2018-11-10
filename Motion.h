@@ -1,5 +1,8 @@
 #include "MotionController.h"
 
+// このモーションは近藤科学KXR-L2用サンプルプロジェクトV1.1をもとにしています。
+// Copyright (C) 2013 Kondo Kagaku co.,ltd. All Rights Reserved.
+
 // ↑: 歩行前
 namespace M001{
     const CmdSet ServoParam1={SET_STRETCH,{ -1, -1, -1, -1, -1, -1, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60}};
